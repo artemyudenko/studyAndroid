@@ -15,11 +15,9 @@ import java.util.List;
 public class ListAdapter extends RecyclerView.Adapter<ItemHolder> {
 
     private List<Item> itemss;
-    private Context context;
 
-    public ListAdapter(List<Item> itemss, Context context) {
+    public ListAdapter(List<Item> itemss) {
         this.itemss = itemss;
-        this.context = context;
     }
 
     @NonNull

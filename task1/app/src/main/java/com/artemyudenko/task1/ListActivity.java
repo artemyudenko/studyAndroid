@@ -2,6 +2,7 @@ package com.artemyudenko.task1;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -23,9 +24,11 @@ public class ListActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        ListAdapter m  = new ListAdapter(getItems(), this);
+        ListAdapter m  = new ListAdapter(getItems());
 
         recyclerView.setAdapter(m);
+        recyclerView.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
     private List<Item> getItems(){
