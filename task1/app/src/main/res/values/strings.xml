@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Task1</string>
+    <string name="preferences_button">Preferences</string>
+    <string name="list_button">List</string>
 </resources>
