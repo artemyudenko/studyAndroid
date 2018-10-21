@@ -29,7 +29,7 @@ public class ListAdapter extends RecyclerView.Adapter<ItemHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ItemHolder itemHolder, int i) {
-        Item item = itemss.get(0);
+        Item item = itemss.get(i);
         itemHolder.getName().setText(item.getName());
         itemHolder.getPrice().setText(item.getPrice());
         itemHolder.getQuantity().setText(String.valueOf(item.getQuantity()));
