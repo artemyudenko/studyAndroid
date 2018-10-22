@@ -24,7 +24,7 @@ public class ItemHolder extends RecyclerView.ViewHolder {
     ItemHolder(@NonNull View itemView) {
         super(itemView);
         this.name = itemView.findViewById(R.id.name);
-        this.price = itemView.findViewById(R.id.price);
+        this.price = itemView.findViewById(R.id.priceAddEdit);
         this.quantity = itemView.findViewById(R.id.numberOfProducts);
         this.checked = itemView.findViewById(R.id.checked);
         this.linearLayout = itemView.findViewById(R.id.valueLay);
