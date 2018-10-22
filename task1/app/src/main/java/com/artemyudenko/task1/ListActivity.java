@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.artemyudenko.task1.adapter.ListAdapter;
@@ -16,6 +17,7 @@ import java.util.List;
 public class ListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+    private ListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +26,12 @@ public class ListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+        listAdapter = new ListAdapter(getItems());
 
-        ListAdapter m  = new ListAdapter(getItems());
-
-        recyclerView.setAdapter(m);
+        recyclerView.setAdapter(listAdapter);
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        registerForContextMenu(recyclerView);
     }
 
     private List<Item> getItems(){
@@ -39,10 +41,14 @@ public class ListActivity extends AppCompatActivity {
         return res;
     }
 
-    public void onDeleteClick(View view) {
-    }
-
     public void onAddClick(View view) {
 
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        CharSequence title = item.getTitle();
+        int position = listAdapter.getPosition();
+        return true;
     }
 }

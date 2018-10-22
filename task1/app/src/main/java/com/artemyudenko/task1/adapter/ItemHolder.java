@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.artemyudenko.task1.R;
-import com.artemyudenko.task1.adapter.listener.ContextMenuListener;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,8 +28,5 @@ public class ItemHolder extends RecyclerView.ViewHolder {
         this.quantity = itemView.findViewById(R.id.numberOfProducts);
         this.checked = itemView.findViewById(R.id.checked);
         this.linearLayout = itemView.findViewById(R.id.valueLay);
-
-        ContextMenuListener conextMenuListener = new ContextMenuListener();
-        this.linearLayout.setOnCreateContextMenuListener(conextMenuListener);
     }
 }
