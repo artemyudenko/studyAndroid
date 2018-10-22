@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.artemyudenko.task1.adapter.ListAdapter;
 import com.artemyudenko.task1.model.Item;
@@ -36,5 +37,12 @@ public class ListActivity extends AppCompatActivity {
         res.add(new Item("Mleko", "3PLN", 3, true));
         res.add(new Item("Chleb", "3PLN", 3, true));
         return res;
+    }
+
+    public void onDeleteClick(View view) {
+    }
+
+    public void onAddClick(View view) {
+
     }
 }
