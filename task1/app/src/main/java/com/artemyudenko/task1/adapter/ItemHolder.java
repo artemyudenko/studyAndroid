@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.artemyudenko.task1.R;
-import com.artemyudenko.task1.adapter.listener.ItemLongClickListener;
+import com.artemyudenko.task1.adapter.listener.ContextMenuListener;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,12 +30,7 @@ public class ItemHolder extends RecyclerView.ViewHolder {
         this.checked = itemView.findViewById(R.id.checked);
         this.linearLayout = itemView.findViewById(R.id.valueLay);
 
-        ItemLongClickListener itemLongClickListener = new ItemLongClickListener();
-        this.linearLayout.setOnLongClickListener(itemLongClickListener);
+        ContextMenuListener conextMenuListener = new ContextMenuListener();
+        this.linearLayout.setOnCreateContextMenuListener(conextMenuListener);
     }
-//
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//
-//    }
 }
