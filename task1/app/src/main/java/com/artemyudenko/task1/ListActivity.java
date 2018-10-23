@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import com.artemyudenko.task1.adapter.ListAdapter;
 import com.artemyudenko.task1.constants.Constants;
@@ -19,11 +20,13 @@ import com.artemyudenko.task1.model.Item;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.artemyudenko.task1.constants.Constants.*;
+
 public class ListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ListAdapter listAdapter;
-    private static List<Item> items;
+    public static List<Item> items = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,13 @@ public class ListActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         registerForContextMenu(recyclerView);
+
+        Intent previous = getIntent();
+        boolean editSuccess = previous.getBooleanExtra(EDIT_SUCCESS.getKey(), false);
+
+        if (editSuccess) {
+            Toast.makeText(this, "Edited", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -47,7 +57,7 @@ public class ListActivity extends AppCompatActivity {
 
         Item selectedItem = items.get(position);
 
-        if (Constants.EDIT.getKey().contentEquals(title)) {
+        if (EDIT.getKey().contentEquals(title)) {
             CheckBox checkBox = findViewById(R.id.checked);
             openEditAddActivity(selectedItem, checkBox.isChecked());
         } else {
@@ -64,18 +74,20 @@ public class ListActivity extends AppCompatActivity {
     private void openEditAddActivity(Item selectedItem, boolean isChecked) {
         Intent moveToAddActivity = new Intent(this, AddEditActivity.class);
         if (selectedItem != null) {
-            moveToAddActivity.putExtra(Constants.EDIT_NAME_KEY.getKey(), selectedItem.getName());
-            moveToAddActivity.putExtra(Constants.EDIT_PRICE_KEY.getKey(), selectedItem.getPrice());
-            moveToAddActivity.putExtra(Constants.EDIT_QUANTITY_KEY.getKey(), selectedItem.getQuantity());
-            moveToAddActivity.putExtra(Constants.EDIT_CHECKED_KEY.getKey(), isChecked);
+            moveToAddActivity.putExtra(EDIT_NAME_KEY.getKey(), selectedItem.getName());
+            moveToAddActivity.putExtra(EDIT_PRICE_KEY.getKey(), selectedItem.getPrice());
+            moveToAddActivity.putExtra(EDIT_QUANTITY_KEY.getKey(), selectedItem.getQuantity());
+            moveToAddActivity.putExtra(EDIT_CHECKED_KEY.getKey(), isChecked);
         }
         startActivity(moveToAddActivity);
     }
 
     private List<Item> getItems() {
-        items = new ArrayList<>();
-        items.add(new Item("Mleko", "3PLN", 3, true));
-        items.add(new Item("Chleb", "3PLN", 3, true));
+        if (items == null) {
+            items = new ArrayList<>();
+            items.add(new Item("Mleko", "3PLN", 3, true));
+            items.add(new Item("Chleb", "3PLN", 3, true));
+        }
         return items;
     }
 

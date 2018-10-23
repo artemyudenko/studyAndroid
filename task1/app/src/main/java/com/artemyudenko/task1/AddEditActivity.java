@@ -3,10 +3,16 @@ package com.artemyudenko.task1;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.artemyudenko.task1.constants.Constants;
+import com.artemyudenko.task1.model.Item;
+
+import static com.artemyudenko.task1.ListActivity.items;
+import static com.artemyudenko.task1.constants.Constants.*;
+import static com.artemyudenko.task1.constants.Constants.EDIT_SUCCESS;
 
 public class AddEditActivity extends AppCompatActivity {
 
@@ -14,6 +20,8 @@ public class AddEditActivity extends AppCompatActivity {
     private TextView price;
     private TextView quantity;
     private CheckBox checkBox;
+
+    private String previousName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +38,42 @@ public class AddEditActivity extends AppCompatActivity {
 
     private void init() {
         Intent fromPrevious = getIntent();
-        String name = fromPrevious.getStringExtra(Constants.EDIT_NAME_KEY.getKey());
+        String name = fromPrevious.getStringExtra(EDIT_NAME_KEY.getKey());
         if (name != null) {
-            String price = fromPrevious.getStringExtra(Constants.EDIT_PRICE_KEY.getKey());
-            int quantity = fromPrevious.getIntExtra(Constants.EDIT_QUANTITY_KEY.getKey(), 0);
-            boolean checked = fromPrevious.getBooleanExtra(Constants.EDIT_CHECKED_KEY.getKey(), false);
+            previousName = name;
+            String price = fromPrevious.getStringExtra(EDIT_PRICE_KEY.getKey());
+            int quantity = fromPrevious.getIntExtra(EDIT_QUANTITY_KEY.getKey(), 0);
+            boolean checked = fromPrevious.getBooleanExtra(EDIT_CHECKED_KEY.getKey(), false);
 
             this.name.setText(name);
             this.price.setText(price);
             this.quantity.setText(String.valueOf(quantity));
             this.checkBox.setChecked(checked);
         }
+    }
+
+    public void onAddEditSaveClick(View view) {
+        CharSequence nameText = name.getText();
+        CharSequence priceText = price.getText();
+        CharSequence quantityText = quantity.getText();
+        boolean checked = checkBox.isChecked();
+
+        if (previousName != null) {
+            for (Item i:items) {
+                if (i.getName().contentEquals(previousName)) {
+                    int index = items.indexOf(i);
+                    i.setName(nameText.toString());
+                    i.setPrice(priceText.toString());
+                    i.setQuantity(Integer.parseInt(quantityText.toString()));
+                    i.setChecked(checked);
+                    items.set(index, i);
+                    break;
+                }
+            }
+        }
+
+        Intent i = new Intent(this, ListActivity.class);
+        i.putExtra(EDIT_SUCCESS.getKey(), true);
+        startActivity(i);
     }
 }
