@@ -61,7 +61,7 @@ public class ListActivity extends AppCompatActivity {
             CheckBox checkBox = findViewById(R.id.checked);
             openEditAddActivity(selectedItem, checkBox.isChecked());
         } else {
-            showDeleteConfirmationDialog(selectedItem.getName());
+            showDeleteConfirmationDialog(selectedItem);
         }
 
         return true;
@@ -91,20 +91,21 @@ public class ListActivity extends AppCompatActivity {
         return items;
     }
 
-    private void showDeleteConfirmationDialog(String itemName) {
+    private void showDeleteConfirmationDialog(final Item selectedItem) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        String alertTitle = "Do you want to delete the item " + itemName + '?';
+        String alertTitle = "Do you want to delete the item " + selectedItem.getName() + '?';
         alert.setTitle(alertTitle);
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                //Your action here
+                items.remove(selectedItem);
             }
         });
 
         alert.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        //Do nothing
                     }
                 });
         alert.show();

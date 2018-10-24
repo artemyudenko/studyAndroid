@@ -58,22 +58,29 @@ public class AddEditActivity extends AppCompatActivity {
         CharSequence quantityText = quantity.getText();
         boolean checked = checkBox.isChecked();
 
+        Intent intent = new Intent(this, ListActivity.class);
+
         if (previousName != null) {
             for (Item i:items) {
                 if (i.getName().contentEquals(previousName)) {
                     int index = items.indexOf(i);
-                    i.setName(nameText.toString());
-                    i.setPrice(priceText.toString());
-                    i.setQuantity(Integer.parseInt(quantityText.toString()));
-                    i.setChecked(checked);
-                    items.set(index, i);
+                    Item item = constructItem(nameText.toString(), priceText.toString(),
+                            Integer.parseInt(quantityText.toString()), checked);
+                    items.set(index, item);
                     break;
                 }
             }
+            intent.putExtra(EDIT_SUCCESS.getKey(), true);
+        } else {
+            Item item = constructItem(nameText.toString(), priceText.toString(),
+                    Integer.parseInt(quantityText.toString()), checked);
+            items.add(item);
+            intent.putExtra(ADD_SUCCESS.getKey(), true);
         }
+        startActivity(intent);
+    }
 
-        Intent i = new Intent(this, ListActivity.class);
-        i.putExtra(EDIT_SUCCESS.getKey(), true);
-        startActivity(i);
+    private Item constructItem(String name, String price, int quantity, boolean checked) {
+        return new Item(name, price, quantity, checked);
     }
 }
