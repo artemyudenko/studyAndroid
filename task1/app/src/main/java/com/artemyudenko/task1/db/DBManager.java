@@ -56,7 +56,6 @@ public class DBManager {
         contentValue.put(PRICE_COLUMN.getS(), item.getPrice());
         contentValue.put(QUANTITY_COLUMN.getS(), item.getQuantity());
         contentValue.put(CHECKED_COLUMN.getS(), item.isChecked());
-        contentValue.put(ACTIVE_COLUMN.getS(), true);
         return contentValue;
     }
 }

@@ -1,20 +1,26 @@
 package com.artemyudenko.task1;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.artemyudenko.task1.constants.Constants;
+import com.artemyudenko.task1.db.DBManager;
 import com.artemyudenko.task1.model.Item;
 
-import static com.artemyudenko.task1.ListActivity.items;
-import static com.artemyudenko.task1.constants.Constants.*;
+import static com.artemyudenko.task1.constants.Constants.ADD_SUCCESS;
+import static com.artemyudenko.task1.constants.Constants.EDIT_CHECKED_KEY;
+import static com.artemyudenko.task1.constants.Constants.EDIT_NAME_KEY;
+import static com.artemyudenko.task1.constants.Constants.EDIT_PRICE_KEY;
+import static com.artemyudenko.task1.constants.Constants.EDIT_QUANTITY_KEY;
 import static com.artemyudenko.task1.constants.Constants.EDIT_SUCCESS;
 
 public class AddEditActivity extends AppCompatActivity {
+
+    private DBManager dbManager;
 
     private TextView name;
     private TextView price;
@@ -22,6 +28,7 @@ public class AddEditActivity extends AppCompatActivity {
     private CheckBox checkBox;
 
     private String previousName;
+    private long id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,8 @@ public class AddEditActivity extends AppCompatActivity {
         quantity = findViewById(R.id.quantityAddEdit);
         checkBox = findViewById(R.id.checkBoxAddEdit);
 
+        dbManager = new DBManager(this);
+
         init();
     }
 
@@ -40,7 +49,9 @@ public class AddEditActivity extends AppCompatActivity {
         Intent fromPrevious = getIntent();
         String name = fromPrevious.getStringExtra(EDIT_NAME_KEY.getKey());
         if (name != null) {
-            previousName = name;
+            this.previousName = name;
+            this.id = fromPrevious.getLongExtra(Constants.EDIT_ID_KEY.getKey(), 0);
+
             String price = fromPrevious.getStringExtra(EDIT_PRICE_KEY.getKey());
             int quantity = fromPrevious.getIntExtra(EDIT_QUANTITY_KEY.getKey(), 0);
             boolean checked = fromPrevious.getBooleanExtra(EDIT_CHECKED_KEY.getKey(), false);
@@ -61,26 +72,23 @@ public class AddEditActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ListActivity.class);
 
         if (previousName != null) {
-            for (Item i:items) {
-                if (i.getName().contentEquals(previousName)) {
-                    int index = items.indexOf(i);
-                    Item item = constructItem(nameText.toString(), priceText.toString(),
-                            Integer.parseInt(quantityText.toString()), checked);
-                    items.set(index, item);
-                    break;
-                }
-            }
+            Item item = constructItem(this.id, nameText.toString(), priceText.toString(),
+                Integer.parseInt(quantityText.toString()), checked);
+            dbManager.open();
+            dbManager.update(item, item.getId());
             intent.putExtra(EDIT_SUCCESS.getKey(), true);
         } else {
-            Item item = constructItem(nameText.toString(), priceText.toString(),
+            dbManager.open();
+            Item item = constructItem(0, nameText.toString(), priceText.toString(),
                     Integer.parseInt(quantityText.toString()), checked);
-            items.add(item);
+            dbManager.insert(item);
             intent.putExtra(ADD_SUCCESS.getKey(), true);
         }
+        dbManager.close();
         startActivity(intent);
     }
 
-    private Item constructItem(String name, String price, int quantity, boolean checked) {
-        return new Item(name, price, quantity, checked);
+    private Item constructItem(long id, String name, String price, int quantity, boolean checked) {
+        return new Item(id, name, price, quantity, checked);
     }
 }

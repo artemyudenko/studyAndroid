@@ -3,6 +3,7 @@ package com.artemyudenko.task1;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -15,10 +16,14 @@ import android.widget.Toast;
 
 import com.artemyudenko.task1.adapter.ListAdapter;
 import com.artemyudenko.task1.constants.Constants;
+import com.artemyudenko.task1.db.DBEnum;
+import com.artemyudenko.task1.db.DBManager;
 import com.artemyudenko.task1.model.Item;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.artemyudenko.task1.constants.Constants.*;
 
@@ -26,16 +31,22 @@ public class ListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ListAdapter listAdapter;
-    public static List<Item> items = null;
+    private List<Item> items;
+    private DBManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         recyclerView = findViewById(R.id.recyclerView);
+
+        dbManager = new DBManager(this);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         listAdapter = new ListAdapter(getItems());
+
+        listAdapter.notifyDataSetChanged();
 
         recyclerView.setAdapter(listAdapter);
         recyclerView.addItemDecoration(
@@ -44,9 +55,12 @@ public class ListActivity extends AppCompatActivity {
 
         Intent previous = getIntent();
         boolean editSuccess = previous.getBooleanExtra(EDIT_SUCCESS.getKey(), false);
+        boolean addSuccess = previous.getBooleanExtra(ADD_SUCCESS.getKey(), false);
 
         if (editSuccess) {
             Toast.makeText(this, "Edited", Toast.LENGTH_SHORT).show();
+        } else if (addSuccess) {
+            Toast.makeText(this, "Added a new item", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -74,6 +88,7 @@ public class ListActivity extends AppCompatActivity {
     private void openEditAddActivity(Item selectedItem, boolean isChecked) {
         Intent moveToAddActivity = new Intent(this, AddEditActivity.class);
         if (selectedItem != null) {
+            moveToAddActivity.putExtra(EDIT_ID_KEY.getKey(), selectedItem.getId());
             moveToAddActivity.putExtra(EDIT_NAME_KEY.getKey(), selectedItem.getName());
             moveToAddActivity.putExtra(EDIT_PRICE_KEY.getKey(), selectedItem.getPrice());
             moveToAddActivity.putExtra(EDIT_QUANTITY_KEY.getKey(), selectedItem.getQuantity());
@@ -83,11 +98,22 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private List<Item> getItems() {
-        if (items == null) {
-            items = new ArrayList<>();
-            items.add(new Item("Mleko", "3PLN", 3, true));
-            items.add(new Item("Chleb", "3PLN", 3, true));
+        dbManager.open();
+        items = new ArrayList<>();
+        Cursor data = dbManager.fetch();
+        if (data.moveToFirst()) {
+            do {
+                items.add( new Item(
+                    data.getLong(data.getColumnIndex(DBEnum.ID_COLUMN.getS())),
+                    data.getString(data.getColumnIndex(DBEnum.NAME_COLUMN.getS())),
+                    data.getString(data.getColumnIndex(DBEnum.PRICE_COLUMN.getS())),
+                    data.getInt(data.getColumnIndex(DBEnum.QUANTITY_COLUMN.getS())),
+                    data.getInt(data.getColumnIndex(DBEnum.CHECKED_COLUMN.getS())) == 1
+                ));
+            } while (data.moveToNext());
         }
+        dbManager.close();
+
         return items;
     }
 
@@ -97,10 +123,14 @@ public class ListActivity extends AppCompatActivity {
         alert.setTitle(alertTitle);
 
         alert.setPositiveButton("Ok", (dialog, whichButton) -> {
-            items.remove(selectedItem);
+            dbManager.open();
+            dbManager.delete(selectedItem.getId());
             int position = items.indexOf(selectedItem);
+            items.remove(selectedItem);
             listAdapter.notifyItemRemoved(position);
             listAdapter.notifyItemRangeChanged(position, items.size());
+            listAdapter.notifyDataSetChanged();
+            dbManager.close();
             Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
         });
 
