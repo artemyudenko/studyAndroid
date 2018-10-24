@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ItemHolder extends RecyclerView.ViewHolder {
+class ItemHolder extends RecyclerView.ViewHolder {
     private TextView name;
     private TextView price;
     private TextView quantity;

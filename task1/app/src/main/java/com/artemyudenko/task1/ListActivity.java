@@ -96,7 +96,13 @@ public class ListActivity extends AppCompatActivity {
         String alertTitle = "Do you want to delete the item " + selectedItem.getName() + '?';
         alert.setTitle(alertTitle);
 
-        alert.setPositiveButton("Ok", (dialog, whichButton) -> items.remove(selectedItem));
+        alert.setPositiveButton("Ok", (dialog, whichButton) -> {
+            items.remove(selectedItem);
+            int position = items.indexOf(selectedItem);
+            listAdapter.notifyItemRemoved(position);
+            listAdapter.notifyItemRangeChanged(position, items.size());
+            Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+        });
 
         alert.setNegativeButton("Cancel",
                 (dialog, whichButton) -> {
