@@ -43,7 +43,6 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         TextView noItemView = findViewById(R.id.noItems);
-
         dbManager = new DBManager(this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
