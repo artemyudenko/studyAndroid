@@ -40,12 +40,9 @@ public class ListAdapter extends RecyclerView.Adapter<ItemHolder> {
         itemHolder.getChecked().setChecked(item.isChecked());
         ContextMenuListener contextMenuListener = new ContextMenuListener();
         itemHolder.getLinearLayout().setOnCreateContextMenuListener(contextMenuListener);
-        itemHolder.getLinearLayout().setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                setPosition(itemHolder.getLayoutPosition());
-                return false;
-            }
+        itemHolder.getLinearLayout().setOnLongClickListener(v -> {
+            setPosition(itemHolder.getLayoutPosition());
+            return false;
         });
     }
 

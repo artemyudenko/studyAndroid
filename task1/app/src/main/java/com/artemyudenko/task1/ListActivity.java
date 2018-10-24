@@ -96,17 +96,11 @@ public class ListActivity extends AppCompatActivity {
         String alertTitle = "Do you want to delete the item " + selectedItem.getName() + '?';
         alert.setTitle(alertTitle);
 
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                items.remove(selectedItem);
-            }
-        });
+        alert.setPositiveButton("Ok", (dialog, whichButton) -> items.remove(selectedItem));
 
         alert.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        //Do nothing
-                    }
+                (dialog, whichButton) -> {
+                    //Do nothing
                 });
         alert.show();
     }
