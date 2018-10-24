@@ -29,7 +29,6 @@ import static com.artemyudenko.task1.constants.Constants.*;
 
 public class ListActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
     private ListAdapter listAdapter;
     private List<Item> items;
     private DBManager dbManager;
@@ -38,7 +37,7 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         dbManager = new DBManager(this);
 
