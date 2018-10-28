@@ -3,6 +3,7 @@ package com.artemyudenko.task1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -65,27 +66,37 @@ public class AddEditActivity extends AppCompatActivity {
 
     public void onAddEditSaveClick(View view) {
         CharSequence nameText = name.getText();
-        CharSequence priceText = price.getText();
-        CharSequence quantityText = quantity.getText();
-        boolean checked = checkBox.isChecked();
-
-        Intent intent = new Intent(this, ListActivity.class);
-
-        if (previousName != null) {
-            Item item = constructItem(this.id, nameText.toString(), priceText.toString(),
-                Integer.parseInt(quantityText.toString()), checked);
-            dbManager.open();
-            dbManager.update(item, item.getId());
-            intent.putExtra(EDIT_SUCCESS.getKey(), true);
+        if (TextUtils.isEmpty(nameText)) {
+            name.setError("Name is required!");
         } else {
-            dbManager.open();
-            Item item = constructItem(0, nameText.toString(), priceText.toString(),
-                    Integer.parseInt(quantityText.toString()), checked);
-            dbManager.insert(item);
-            intent.putExtra(ADD_SUCCESS.getKey(), true);
+            CharSequence priceText = price.getText();
+            CharSequence quantityText = quantity.getText();
+            boolean checked = checkBox.isChecked();
+
+            int quantity = 0;
+
+            if (!TextUtils.isEmpty(quantityText)) {
+                quantity = Integer.parseInt(quantityText.toString());
+            }
+
+            Intent intent = new Intent(this, ListActivity.class);
+
+            if (previousName != null) {
+                Item item = constructItem(this.id, nameText.toString(), priceText.toString(),
+                        quantity , checked);
+                dbManager.open();
+                dbManager.update(item, item.getId());
+                intent.putExtra(EDIT_SUCCESS.getKey(), true);
+            } else {
+                dbManager.open();
+                Item item = constructItem(0, nameText.toString(), priceText.toString(),
+                        quantity, checked);
+                dbManager.insert(item);
+                intent.putExtra(ADD_SUCCESS.getKey(), true);
+            }
+            dbManager.close();
+            startActivity(intent);
         }
-        dbManager.close();
-        startActivity(intent);
     }
 
     private Item constructItem(long id, String name, String price, int quantity, boolean checked) {
