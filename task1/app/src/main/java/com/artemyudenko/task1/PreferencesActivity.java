@@ -11,9 +11,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.artemyudenko.task1.constants.Constants;
+import com.artemyudenko.task1.util.CommonUtil;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.artemyudenko.task1.constants.Constants.PRFERENCES_NAME;
 
 public class PreferencesActivity extends AppCompatActivity {
 
@@ -25,24 +28,21 @@ public class PreferencesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(PRFERENCES_NAME.getKey(),Context.MODE_PRIVATE);
         editText = findViewById(R.id.editText);
-
-        String defaulSavedTextPrefs = "Size";
-        String savedTextPref = sharedPreferences.getString(Constants.PREFERENCES_VALUE_KEY.getKey(),
-                defaulSavedTextPrefs);
-        editText.setText(savedTextPref);
-
-        String savedDropDown = sharedPreferences.getString(Constants.PREFERENCES_VALUE_KEY.getKey(),
-                "");
-        fillInDropdown(savedDropDown);
+        editText.setText(String.valueOf(CommonUtil.getPreferencesSize(sharedPreferences)));
+        fillInDropdown(CommonUtil.getPreferencesDropDown(sharedPreferences));
     }
 
     public void onSaveClick(View view) {
         editText = findViewById(R.id.editText);
         String sizeToSave = editText.getText().toString();
+        int size = 0;
+        if (!sizeToSave.isEmpty()) {
+            size = Integer.parseInt(sizeToSave);
+        }
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(Constants.PREFERENCES_VALUE_KEY.getKey(), sizeToSave);
+        editor.putInt(Constants.PREFERENCES_VALUE_KEY.getKey(), size);
 
         dropdown = findViewById(R.id.spinner);
         String selectedColor = dropdown.getSelectedItem().toString();
