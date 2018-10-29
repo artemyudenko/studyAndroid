@@ -15,9 +15,6 @@ import static com.artemyudenko.task1.constants.Constants.PRFERENCES_NAME;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnPref;
-    private Button btnList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         int preferencesSize = CommonUtil.getPreferencesSize(sharedPreferences);
 
         int nColor = getColor(preferencesDropDown);
-        btnList = findViewById(R.id.listButton);
-        btnPref = findViewById(R.id.preferncesButton);
+        Button btnList = findViewById(R.id.listButton);
+        Button btnPref = findViewById(R.id.preferncesButton);
 
         if (nColor != -1) {
             btnList.setBackgroundColor(nColor);
@@ -69,5 +66,10 @@ public class MainActivity extends AppCompatActivity {
             return Color.GREEN;
         }
         return -1;
+    }
+    
+    private void clearPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PRFERENCES_NAME.getKey(),Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().commit();
     }
 }
