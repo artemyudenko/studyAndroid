@@ -12,7 +12,8 @@ public enum Constants {
     EDIT_QUANTITY_KEY("edit_quantity_key"),
     EDIT_CHECKED_KEY("edit_checked_key"),
     EDIT_SUCCESS("edit_success"),
-    ADD_SUCCESS("add_success");
+    ADD_SUCCESS("add_success"),
+    PRFERENCES_NAME("task1_preferences");
 
     private String key;
 
