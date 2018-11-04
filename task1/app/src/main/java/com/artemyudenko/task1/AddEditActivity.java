@@ -65,6 +65,7 @@ public class AddEditActivity extends AppCompatActivity {
     }
 
     public void onAddEditSaveClick(View view) {
+        boolean addPerformed = false;
         CharSequence nameText = name.getText();
         if (TextUtils.isEmpty(nameText)) {
             name.setError("Name is required!");
@@ -89,10 +90,18 @@ public class AddEditActivity extends AppCompatActivity {
                 intent.putExtra(EDIT_SUCCESS.getKey(), true);
             } else {
                 dbManager.open();
+                addPerformed = true;
                 Item item = constructItem(0, nameText.toString(), priceText.toString(),
                         quantity, checked);
                 dbManager.insert(item);
                 intent.putExtra(ADD_SUCCESS.getKey(), true);
+            }
+            if (addPerformed) {
+                Intent sharedIntent = new Intent();
+                sharedIntent.setAction(Intent.ACTION_SEND);
+                sharedIntent.putExtra(Intent.EXTRA_TEXT, "hello");
+                sharedIntent.setType("text/plain");
+                startActivity(sharedIntent);
             }
             dbManager.close();
             startActivity(intent);
