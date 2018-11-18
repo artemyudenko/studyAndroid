@@ -13,11 +13,13 @@ import com.artemyudenko.task1.db.DBManager;
 import com.artemyudenko.task1.model.Item;
 
 import static com.artemyudenko.task1.constants.Constants.ADD_SUCCESS;
+import static com.artemyudenko.task1.constants.Constants.CATEGORY;
 import static com.artemyudenko.task1.constants.Constants.EDIT_CHECKED_KEY;
 import static com.artemyudenko.task1.constants.Constants.EDIT_NAME_KEY;
 import static com.artemyudenko.task1.constants.Constants.EDIT_PRICE_KEY;
 import static com.artemyudenko.task1.constants.Constants.EDIT_QUANTITY_KEY;
 import static com.artemyudenko.task1.constants.Constants.EDIT_SUCCESS;
+import static com.artemyudenko.task1.constants.Constants.S_INTENT_FILTER;
 
 public class AddEditActivity extends AppCompatActivity {
 
@@ -93,6 +95,13 @@ public class AddEditActivity extends AppCompatActivity {
                         quantity, checked);
                 dbManager.insert(item);
                 intent.putExtra(ADD_SUCCESS.getKey(), true);
+
+                Intent sharedIntent = new Intent();
+                sharedIntent.setAction(S_INTENT_FILTER.getKey());
+                sharedIntent.addCategory(CATEGORY.getKey());
+                sharedIntent.putExtra("NAME", item.getName());
+                //TODO get ID from DB
+                sendBroadcast(sharedIntent, "com.example.my_permissions.MY_PERMISSION");
             }
             dbManager.close();
             startActivity(intent);
