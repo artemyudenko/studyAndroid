@@ -9,6 +9,8 @@
         android:permissionGroup="com.artemyudenko.my_permissions"
         android:label="my permission for receive intents"/>
 
+    <uses-permission android:name="com.permissions.NOTI_CLICK" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,7 +27,7 @@
         </activity>
         <activity android:name=".PreferencesActivity" />
         <activity android:name=".ListActivity" />
-        <activity android:name=".AddEditActivity" ></activity>
+        <activity android:name=".AddEditActivity" />
     </application>
 
 </manifest>
