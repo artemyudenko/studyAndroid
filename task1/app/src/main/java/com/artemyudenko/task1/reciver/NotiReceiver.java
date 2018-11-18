@@ -10,17 +10,17 @@ import com.artemyudenko.task1.MainActivity;
 
 public class NotiReceiver extends BroadcastReceiver {
 
+    private int list = 2;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         int location = intent.getIntExtra("LOCATION", 0);
-        Intent intent1;
-        if (location == 2) {
-            intent1 = new Intent(context, AddEditActivity.class);
-        } else if (location == 3) {
-            intent1 = new Intent(context, ListActivity.class);
+        Intent transferIntent;
+        if (location == list) {
+            transferIntent = new Intent(context, ListActivity.class);
         } else {
-            intent1 = new Intent(context, MainActivity.class);
+            transferIntent = new Intent(context, MainActivity.class);
         }
-        context.startActivity(intent1);
+        context.startActivity(transferIntent);
     }
 }

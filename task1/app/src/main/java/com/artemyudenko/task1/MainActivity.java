@@ -17,25 +17,28 @@ import static com.artemyudenko.task1.constants.Constants.PRFERENCES_NAME;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String S_INTENT_FILTER = "sharedIntent2";
-    public static final String CATEGORY = "sharedCat2";
+    private NotiReceiver notiReceiver = new NotiReceiver();
+    private static final String S_INTENT_FILTER = "sharedIntent2";
+    private static final String CATEGORY = "sharedCat2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        IntentFilter intentFilter = new IntentFilter(S_INTENT_FILTER);
-        intentFilter.addCategory(CATEGORY);
-        registerReceiver(new NotiReceiver(), intentFilter);
+        registerBroad();
     }
 
     @Override
     public void onStart(){
         super.onStart();
         applyPrefs();
+        registerBroad();
+    }
+
+    private void registerBroad() {
         IntentFilter intentFilter = new IntentFilter(S_INTENT_FILTER);
         intentFilter.addCategory(CATEGORY);
-        registerReceiver(new NotiReceiver(), intentFilter);
+        registerReceiver(notiReceiver, intentFilter);
     }
 
     public void onPreferencesClick(View view) {
