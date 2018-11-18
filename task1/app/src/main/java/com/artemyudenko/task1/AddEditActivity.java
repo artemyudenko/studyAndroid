@@ -101,7 +101,7 @@ public class AddEditActivity extends AppCompatActivity {
                 sharedIntent.addCategory(CATEGORY.getKey());
                 sharedIntent.putExtra("NAME", item.getName());
                 //TODO get ID from DB
-                sendBroadcast(sharedIntent, "com.example.my_permissions.MY_PERMISSION");
+                sendBroadcast(sharedIntent, "com.artemyudenko.my_permissions.SHARE_INTENT");
             }
             dbManager.close();
             startActivity(intent);
