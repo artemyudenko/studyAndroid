@@ -13,7 +13,7 @@ public class NotiReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int location = intent.getIntExtra("LOCATION", 0);
-        Intent intent1 = null;
+        Intent intent1;
         if (location == 2) {
             intent1 = new Intent(context, AddEditActivity.class);
         } else if (location == 3) {
