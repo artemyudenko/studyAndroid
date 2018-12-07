@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.artemyudenko.task1.constants.Constants;
 import com.artemyudenko.task1.db.DBManager;
+import com.artemyudenko.task1.db.DBManagerLocal;
 import com.artemyudenko.task1.model.Item;
 
 import static com.artemyudenko.task1.constants.Constants.ADD_SUCCESS;
@@ -43,7 +44,7 @@ public class AddEditActivity extends AppCompatActivity {
         quantity = findViewById(R.id.quantityAddEdit);
         checkBox = findViewById(R.id.checkBoxAddEdit);
 
-        dbManager = new DBManager(this);
+        dbManager = new DBManagerLocal(this);
 
         init();
     }
