@@ -16,5 +16,5 @@ public interface DBManager {
 
     void delete(long id);
 
-    Cursor fetch();
+    Object fetch();
 }

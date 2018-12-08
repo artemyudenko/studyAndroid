@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.artemyudenko.task1">
+
     <permission-group
         android:name="com.artemyudenko.my_permissions"
         android:label="my permissions group" />
-    <permission android:name="com.artemyudenko.my_permissions.SHARE_INTENT"
-        android:protectionLevel="normal"
+
+    <permission
+        android:name="com.artemyudenko.my_permissions.SHARE_INTENT"
+        android:label="my permission for receive intents"
         android:permissionGroup="com.artemyudenko.my_permissions"
-        android:label="my permission for receive intents"/>
+        android:protectionLevel="normal" />
 
     <uses-permission android:name="com.permissions.NOTI_CLICK" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -18,16 +26,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" />
+        <activity android:name=".PreferencesActivity" />
+        <activity android:name=".ListActivity" />
+        <activity android:name=".AddEditActivity" />
+        <activity
+            android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PreferencesActivity" />
-        <activity android:name=".ListActivity" />
-        <activity android:name=".AddEditActivity" />
+        <activity
+            android:name=".RegistrationActivity"></activity>
     </application>
 
 </manifest>
