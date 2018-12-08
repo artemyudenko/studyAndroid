@@ -7,6 +7,7 @@ public enum Constants {
     DELETE("Delete"),
     CONTEXT_MENU_HEADER("Select the action"),
     EDIT_ID_KEY("edit_id_key"),
+    EDIT_KEY_KEY("edit_key_key"),
     EDIT_NAME_KEY("edit_name_key"),
     EDIT_PRICE_KEY("edit_price_key"),
     EDIT_QUANTITY_KEY("edit_quantity_key"),

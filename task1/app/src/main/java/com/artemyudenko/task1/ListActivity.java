@@ -2,8 +2,8 @@ package com.artemyudenko.task1;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,9 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.artemyudenko.task1.adapter.ListAdapter;
-import com.artemyudenko.task1.db.DBEnum;
-import com.artemyudenko.task1.db.DBManagerLocal;
+import com.artemyudenko.task1.db.DBManager;
+import com.artemyudenko.task1.db.DBManagerCloud;
 import com.artemyudenko.task1.model.Item;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +31,7 @@ import static com.artemyudenko.task1.constants.Constants.ADD_SUCCESS;
 import static com.artemyudenko.task1.constants.Constants.EDIT;
 import static com.artemyudenko.task1.constants.Constants.EDIT_CHECKED_KEY;
 import static com.artemyudenko.task1.constants.Constants.EDIT_ID_KEY;
+import static com.artemyudenko.task1.constants.Constants.EDIT_KEY_KEY;
 import static com.artemyudenko.task1.constants.Constants.EDIT_NAME_KEY;
 import static com.artemyudenko.task1.constants.Constants.EDIT_PRICE_KEY;
 import static com.artemyudenko.task1.constants.Constants.EDIT_QUANTITY_KEY;
@@ -35,7 +41,7 @@ public class ListActivity extends AppCompatActivity {
 
     private ListAdapter listAdapter;
     private List<Item> items;
-    private DBManagerLocal dbManagerLocal;
+    private DBManager dbManagerLocal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,27 +49,44 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         TextView noItemView = findViewById(R.id.noItems);
-        dbManagerLocal = new DBManagerLocal(this);
+        dbManagerLocal = new DBManagerCloud();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<Item> items = getItems();
+        //List<Item> items = getItems();
+        items = new ArrayList<>();
+        DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("items");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (!items.contains(snapshot.getValue(Item.class))){
+                        items.add(snapshot.getValue(Item.class));
+                    }
+                }
+                listAdapter = new ListAdapter(items);
+                listAdapter.notifyDataSetChanged();
 
-        if (items.isEmpty()) {
-            noItemView.setVisibility(View.VISIBLE);
-        } else {
-            noItemView.setVisibility(View.INVISIBLE);
-        }
+                recyclerView.setAdapter(listAdapter);
 
-        listAdapter = new ListAdapter(items);
+                if (items.isEmpty()) {
+                    noItemView.setVisibility(View.VISIBLE);
+                } else {
+                    noItemView.setVisibility(View.INVISIBLE);
+                }
+            }
 
-        listAdapter.notifyDataSetChanged();
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        recyclerView.setAdapter(listAdapter);
+            }
+        });
+
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         registerForContextMenu(recyclerView);
 
+        //moved to cloud
         Intent previous = getIntent();
         boolean editSuccess = previous.getBooleanExtra(EDIT_SUCCESS.getKey(), false);
         boolean addSuccess = previous.getBooleanExtra(ADD_SUCCESS.getKey(), false);
@@ -100,6 +123,7 @@ public class ListActivity extends AppCompatActivity {
         Intent moveToAddActivity = new Intent(this, AddEditActivity.class);
         if (selectedItem != null) {
             moveToAddActivity.putExtra(EDIT_ID_KEY.getKey(), selectedItem.getId());
+            moveToAddActivity.putExtra(EDIT_KEY_KEY.getKey(), selectedItem.getKey());
             moveToAddActivity.putExtra(EDIT_NAME_KEY.getKey(), selectedItem.getName());
             moveToAddActivity.putExtra(EDIT_PRICE_KEY.getKey(), selectedItem.getPrice());
             moveToAddActivity.putExtra(EDIT_QUANTITY_KEY.getKey(), selectedItem.getQuantity());
@@ -108,21 +132,22 @@ public class ListActivity extends AppCompatActivity {
         startActivity(moveToAddActivity);
     }
 
+    //for local
     private List<Item> getItems() {
         dbManagerLocal.open();
         items = new ArrayList<>();
-        Cursor data = dbManagerLocal.fetch();
-        if (data.moveToFirst()) {
-            do {
-                items.add( new Item(
-                    data.getLong(data.getColumnIndex(DBEnum.ID_COLUMN.getS())),
-                    data.getString(data.getColumnIndex(DBEnum.NAME_COLUMN.getS())),
-                    data.getString(data.getColumnIndex(DBEnum.PRICE_COLUMN.getS())),
-                    data.getInt(data.getColumnIndex(DBEnum.QUANTITY_COLUMN.getS())),
-                    data.getInt(data.getColumnIndex(DBEnum.CHECKED_COLUMN.getS())) == 1
-                ));
-            } while (data.moveToNext());
-        }
+//        Cursor data = dbManagerLocal.fetch();
+//        if (data.moveToFirst()) {
+//            do {
+//                items.add( new Item(
+//                    data.getLong(data.getColumnIndex(DBEnum.ID_COLUMN.getS())),
+//                    data.getString(data.getColumnIndex(DBEnum.NAME_COLUMN.getS())),
+//                    data.getString(data.getColumnIndex(DBEnum.PRICE_COLUMN.getS())),
+//                    data.getInt(data.getColumnIndex(DBEnum.QUANTITY_COLUMN.getS())),
+//                    data.getInt(data.getColumnIndex(DBEnum.CHECKED_COLUMN.getS())) == 1
+//                ));
+//            } while (data.moveToNext());
+//        }
         dbManagerLocal.close();
 
         return items;
@@ -135,7 +160,7 @@ public class ListActivity extends AppCompatActivity {
 
         alert.setPositiveButton("Ok", (dialog, whichButton) -> {
             dbManagerLocal.open();
-            dbManagerLocal.delete(selectedItem.getId());
+            dbManagerLocal.delete(selectedItem.getKey());
             int position = items.indexOf(selectedItem);
             items.remove(selectedItem);
             listAdapter.notifyItemRemoved(position);

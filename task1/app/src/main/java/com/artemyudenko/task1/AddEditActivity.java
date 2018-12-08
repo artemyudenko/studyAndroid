@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.artemyudenko.task1.constants.Constants;
 import com.artemyudenko.task1.db.DBManager;
-import com.artemyudenko.task1.db.DBManagerLocal;
+import com.artemyudenko.task1.db.DBManagerCloud;
 import com.artemyudenko.task1.model.Item;
 
 import static com.artemyudenko.task1.constants.Constants.ADD_SUCCESS;
@@ -33,6 +33,7 @@ public class AddEditActivity extends AppCompatActivity {
 
     private String previousName;
     private long id;
+    private String keyForUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class AddEditActivity extends AppCompatActivity {
         quantity = findViewById(R.id.quantityAddEdit);
         checkBox = findViewById(R.id.checkBoxAddEdit);
 
-        dbManager = new DBManagerLocal(this);
+        dbManager = new DBManagerCloud();
 
         init();
     }
@@ -55,6 +56,7 @@ public class AddEditActivity extends AppCompatActivity {
         if (name != null) {
             this.previousName = name;
             this.id = fromPrevious.getLongExtra(Constants.EDIT_ID_KEY.getKey(), 0);
+            this.keyForUpdate = fromPrevious.getStringExtra(Constants.EDIT_KEY_KEY.getKey());
 
             String price = fromPrevious.getStringExtra(EDIT_PRICE_KEY.getKey());
             int quantity = fromPrevious.getIntExtra(EDIT_QUANTITY_KEY.getKey(), 0);
@@ -87,6 +89,9 @@ public class AddEditActivity extends AppCompatActivity {
             if (previousName != null) {
                 Item item = constructItem(this.id, nameText.toString(), priceText.toString(),
                         quantity , checked);
+
+                item.setKey(this.keyForUpdate);
+
                 dbManager.open();
                 dbManager.update(item, item.getId());
                 intent.putExtra(EDIT_SUCCESS.getKey(), true);

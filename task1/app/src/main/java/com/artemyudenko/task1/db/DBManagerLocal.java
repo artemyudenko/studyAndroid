@@ -56,6 +56,11 @@ public class DBManagerLocal implements DBManager {
         database.delete(TABLE_NAME.getS(), ID_COLUMN.getS() + '=' + id, null);
     }
 
+    @Override
+    public void delete(String key) {
+
+    }
+
     private ContentValues constructDBObject(Item item) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(NAME_COLUMN.getS(), item.getName());
