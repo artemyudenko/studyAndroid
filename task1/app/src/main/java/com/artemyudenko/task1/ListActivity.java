@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.artemyudenko.task1.adapter.ListAdapter;
 import com.artemyudenko.task1.db.DBEnum;
-import com.artemyudenko.task1.db.DBManager;
+import com.artemyudenko.task1.db.DBManagerLocal;
 import com.artemyudenko.task1.model.Item;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class ListActivity extends AppCompatActivity {
 
     private ListAdapter listAdapter;
     private List<Item> items;
-    private DBManager dbManager;
+    private DBManagerLocal dbManagerLocal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +43,7 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         TextView noItemView = findViewById(R.id.noItems);
-        dbManager = new DBManager(this);
-
+        dbManagerLocal = new DBManagerLocal(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -110,9 +109,9 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private List<Item> getItems() {
-        dbManager.open();
+        dbManagerLocal.open();
         items = new ArrayList<>();
-        Cursor data = dbManager.fetch();
+        Cursor data = dbManagerLocal.fetch();
         if (data.moveToFirst()) {
             do {
                 items.add( new Item(
@@ -124,7 +123,7 @@ public class ListActivity extends AppCompatActivity {
                 ));
             } while (data.moveToNext());
         }
-        dbManager.close();
+        dbManagerLocal.close();
 
         return items;
     }
@@ -135,14 +134,14 @@ public class ListActivity extends AppCompatActivity {
         alert.setTitle(alertTitle);
 
         alert.setPositiveButton("Ok", (dialog, whichButton) -> {
-            dbManager.open();
-            dbManager.delete(selectedItem.getId());
+            dbManagerLocal.open();
+            dbManagerLocal.delete(selectedItem.getId());
             int position = items.indexOf(selectedItem);
             items.remove(selectedItem);
             listAdapter.notifyItemRemoved(position);
             listAdapter.notifyItemRangeChanged(position, items.size());
             listAdapter.notifyDataSetChanged();
-            dbManager.close();
+            dbManagerLocal.close();
             Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
         });
 

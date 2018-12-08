@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "926612677237",
+    "firebase_url": "https://task4-1865b.firebaseio.com",
+    "project_id": "task4-1865b",
+    "storage_bucket": "task4-1865b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926612677237:android:94a94744c3057f7d",
+        "android_client_info": {
+          "package_name": "com.artemyudenko.task1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "926612677237-r5ch8jsguqrl69oan688cvt8l6tmqf8j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnWbM1QfaBUSuhtFPv_mg7QE1UwDtrmAM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

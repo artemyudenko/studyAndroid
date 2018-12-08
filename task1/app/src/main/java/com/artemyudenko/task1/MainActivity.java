@@ -2,6 +2,7 @@ package com.artemyudenko.task1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,22 +10,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.artemyudenko.task1.reciver.NotiReceiver;
 import com.artemyudenko.task1.util.CommonUtil;
 
 import static com.artemyudenko.task1.constants.Constants.PRFERENCES_NAME;
 
 public class MainActivity extends AppCompatActivity {
 
+    private NotiReceiver notiReceiver = new NotiReceiver();
+    private static final String S_INTENT_FILTER = "sharedIntent2";
+    private static final String CATEGORY = "sharedCat2";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        registerBroad();
     }
 
     @Override
     public void onStart(){
         super.onStart();
         applyPrefs();
+        registerBroad();
+    }
+
+    private void registerBroad() {
+        IntentFilter intentFilter = new IntentFilter(S_INTENT_FILTER);
+        intentFilter.addCategory(CATEGORY);
+        registerReceiver(notiReceiver, intentFilter);
     }
 
     public void onPreferencesClick(View view) {

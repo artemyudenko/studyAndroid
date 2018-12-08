@@ -13,7 +13,9 @@ public enum Constants {
     EDIT_CHECKED_KEY("edit_checked_key"),
     EDIT_SUCCESS("edit_success"),
     ADD_SUCCESS("add_success"),
-    PRFERENCES_NAME("task1_preferences");
+    PRFERENCES_NAME("task1_preferences"),
+    S_INTENT_FILTER("sharedIntent"),
+    CATEGORY("sharedCat");
 
     private String key;
 
