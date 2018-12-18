@@ -12,22 +12,17 @@ import static com.artemyudenko.task1.constants.Constants.PRFERENCES_NAME;
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        clearPreferences();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
-
-    public void onPreferencesClick(View view) {
-
     }
 
     public void onListClick(View view) {
         Intent moveToList = new Intent(this, ListActivity.class);
         startActivity(moveToList);
     }
-    
-    private void clearPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PRFERENCES_NAME.getKey(),Context.MODE_PRIVATE);
-        sharedPreferences.edit().clear().commit();
+
+    public void onMapClick(View view) {
+        Intent moveToMap = new Intent(this, Map.class);
+        startActivity(moveToMap);
     }
 }
