@@ -9,7 +9,7 @@ import static com.artemyudenko.task1.db.DBEnum.*;
 class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context) {
-        super(context, DB_NAME.getS(), null, 1);
+        super(context, DB_NAME.getS(), null, 2);
     }
 
     @Override
@@ -17,16 +17,17 @@ class DatabaseHelper extends SQLiteOpenHelper {
         String createTable = "CREATE TABLE " + TABLE_NAME.getS() + " ("
                 + ID_COLUMN.getS() + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + NAME_COLUMN.getS() + " TEXT, "
-                + PRICE_COLUMN.getS() + " TEXT, "
-                + QUANTITY_COLUMN.getS() + " INTEGER, "
-                + CHECKED_COLUMN.getS() + " INTEGER default 0"
+                + DESCRIPTION_COLUMN.getS() + " TEXT, "
+                + BRANCH_COLUMN.getS() + " TEXT, "
+                + LATITUDE_COLUMN.getS() + " TEXT, "
+                + LENGTH_COLUMN.getS() + " TEXT"
                 + ");";
         db.execSQL(createTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_NAME.getS());
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME.getS());
         onCreate(db);
     }
 }

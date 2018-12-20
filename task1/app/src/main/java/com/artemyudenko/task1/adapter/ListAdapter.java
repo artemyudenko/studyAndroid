@@ -35,9 +35,8 @@ public class ListAdapter extends RecyclerView.Adapter<ItemHolder> {
     public void onBindViewHolder(@NonNull final ItemHolder itemHolder, int i) {
         Item item = itemss.get(i);
         itemHolder.getName().setText(item.getName());
-        itemHolder.getPrice().setText(item.getPrice());
-        itemHolder.getQuantity().setText(String.valueOf(item.getQuantity()));
-        itemHolder.getChecked().setChecked(item.isChecked());
+        itemHolder.getDescription().setText(item.getDescription());
+        itemHolder.getBranch().setText(String.valueOf(item.getBranch()));
         ContextMenuListener contextMenuListener = new ContextMenuListener();
         itemHolder.getLinearLayout().setOnCreateContextMenuListener(contextMenuListener);
         itemHolder.getLinearLayout().setOnLongClickListener(v -> {

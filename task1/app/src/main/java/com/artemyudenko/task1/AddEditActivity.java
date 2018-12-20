@@ -5,34 +5,19 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.artemyudenko.task1.constants.Constants;
 import com.artemyudenko.task1.db.DBManager;
 import com.artemyudenko.task1.db.DBManagerLocal;
 import com.artemyudenko.task1.model.Item;
-
-import static com.artemyudenko.task1.constants.Constants.ADD_SUCCESS;
-import static com.artemyudenko.task1.constants.Constants.CATEGORY;
-import static com.artemyudenko.task1.constants.Constants.EDIT_CHECKED_KEY;
-import static com.artemyudenko.task1.constants.Constants.EDIT_NAME_KEY;
-import static com.artemyudenko.task1.constants.Constants.EDIT_PRICE_KEY;
-import static com.artemyudenko.task1.constants.Constants.EDIT_QUANTITY_KEY;
-import static com.artemyudenko.task1.constants.Constants.EDIT_SUCCESS;
-import static com.artemyudenko.task1.constants.Constants.S_INTENT_FILTER;
 
 public class AddEditActivity extends AppCompatActivity {
 
     private DBManager dbManager;
 
     private TextView name;
-    private TextView price;
-    private TextView quantity;
-    private CheckBox checkBox;
-
-    private String previousName;
-    private long id;
+    private TextView descriprion;
+    private TextView branch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,75 +25,31 @@ public class AddEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_edit);
 
         name = findViewById(R.id.nameAddEdit);
-        price = findViewById(R.id.priceAddEdit);
-        quantity = findViewById(R.id.quantityAddEdit);
-        checkBox = findViewById(R.id.checkBoxAddEdit);
+        descriprion = findViewById(R.id.descriptionAdd);
+        branch = findViewById(R.id.branchAdd);
 
         dbManager = new DBManagerLocal(this);
-
-        init();
     }
 
-    private void init() {
-        Intent fromPrevious = getIntent();
-        String name = fromPrevious.getStringExtra(EDIT_NAME_KEY.getKey());
-        if (name != null) {
-            this.previousName = name;
-            this.id = fromPrevious.getLongExtra(Constants.EDIT_ID_KEY.getKey(), 0);
-
-            String price = fromPrevious.getStringExtra(EDIT_PRICE_KEY.getKey());
-            int quantity = fromPrevious.getIntExtra(EDIT_QUANTITY_KEY.getKey(), 0);
-            boolean checked = fromPrevious.getBooleanExtra(EDIT_CHECKED_KEY.getKey(), false);
-
-            this.name.setText(name);
-            this.price.setText(price);
-            this.quantity.setText(String.valueOf(quantity));
-            this.checkBox.setChecked(checked);
-        }
-    }
 
     public void onAddEditSaveClick(View view) {
         CharSequence nameText = name.getText();
         if (TextUtils.isEmpty(nameText)) {
             name.setError("Name is required!");
         } else {
-            CharSequence priceText = price.getText();
-            CharSequence quantityText = quantity.getText();
-            boolean checked = checkBox.isChecked();
-
-            int quantity = 0;
-
-            if (!TextUtils.isEmpty(quantityText)) {
-                quantity = Integer.parseInt(quantityText.toString());
-            }
-
+            CharSequence descriprionText = descriprion.getText();
+            CharSequence branchText = branch.getText();
             Intent intent = new Intent(this, ListActivity.class);
-
-            if (previousName != null) {
-                Item item = constructItem(this.id, nameText.toString(), priceText.toString(),
-                        quantity , checked);
-                dbManager.open();
-                dbManager.update(item, item.getId());
-                intent.putExtra(EDIT_SUCCESS.getKey(), true);
-            } else {
-                dbManager.open();
-                Item item = constructItem(0, nameText.toString(), priceText.toString(),
-                        quantity, checked);
-                dbManager.insert(item);
-                intent.putExtra(ADD_SUCCESS.getKey(), true);
-
-                Intent sharedIntent = new Intent();
-                sharedIntent.setAction(S_INTENT_FILTER.getKey());
-                sharedIntent.addCategory(CATEGORY.getKey());
-                sharedIntent.putExtra("NAME", item.getName());
-                sendBroadcast(sharedIntent, "com.artemyudenko.my_permissions.SHARE_INTENT");
-            }
+            dbManager.open();
+            Item item = constructItem(0, nameText.toString(), descriprionText.toString(),
+                    branchText.toString());
+            dbManager.insert(item);
             dbManager.close();
             startActivity(intent);
         }
     }
 
-    private Item constructItem(long id, String name, String price, int quantity, boolean checked) {
-        return new Item(id, name, price, quantity, checked);
+    private Item constructItem(long id, String name, String description, String branch) {
+        return new Item(id, name, description, branch);
     }
 }

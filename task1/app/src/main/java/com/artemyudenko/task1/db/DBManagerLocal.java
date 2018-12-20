@@ -59,9 +59,10 @@ public class DBManagerLocal implements DBManager {
     private ContentValues constructDBObject(Item item) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(NAME_COLUMN.getS(), item.getName());
-        contentValue.put(PRICE_COLUMN.getS(), item.getPrice());
-        contentValue.put(QUANTITY_COLUMN.getS(), item.getQuantity());
-        contentValue.put(CHECKED_COLUMN.getS(), item.isChecked());
+        contentValue.put(DESCRIPTION_COLUMN.getS(), item.getDescription());
+        contentValue.put(BRANCH_COLUMN.getS(), item.getBranch());
+        contentValue.put(LATITUDE_COLUMN.getS(), item.getLattitude());
+        contentValue.put(LENGTH_COLUMN.getS(), item.getLength());
         return contentValue;
     }
 }
