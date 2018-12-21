@@ -19,4 +19,10 @@ public class Item {
         this.description = description;
         this.branch = branch;
     }
+
+    public Item(String name, String l, String ln) {
+        this.name = name;
+        this.lattitude = l;
+        this.length = ln;
+    }
 }
