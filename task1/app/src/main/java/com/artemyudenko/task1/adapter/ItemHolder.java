@@ -17,7 +17,7 @@ class ItemHolder extends RecyclerView.ViewHolder {
     private TextView name;
     private TextView description;
     private TextView branch;
-    //private EditText location;
+    private EditText location;
 
     private LinearLayout linearLayout;
 
@@ -26,6 +26,7 @@ class ItemHolder extends RecyclerView.ViewHolder {
         this.name = itemView.findViewById(R.id.name);
         this.description = itemView.findViewById(R.id.descriptionAdd);
         this.branch = itemView.findViewById(R.id.branch);
+        this.location = itemView.findViewById(R.id.location);
         this.linearLayout = itemView.findViewById(R.id.valueLay);
     }
 }

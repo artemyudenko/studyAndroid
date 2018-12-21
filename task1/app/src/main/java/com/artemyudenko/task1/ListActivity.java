@@ -36,7 +36,6 @@ public class ListActivity extends AppCompatActivity {
         dbManagerLocal = new DBManagerLocal(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-
         List<Item> items = getItems();
 
         if (items.isEmpty()) {
@@ -45,7 +44,7 @@ public class ListActivity extends AppCompatActivity {
             noItemView.setVisibility(View.INVISIBLE);
         }
 
-        listAdapter = new ListAdapter(items);
+        listAdapter = new ListAdapter(items, this);
 
         listAdapter.notifyDataSetChanged();
 
@@ -53,9 +52,11 @@ public class ListActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         registerForContextMenu(recyclerView);
+    }
 
-        Toast.makeText(this, "Added a new item", Toast.LENGTH_SHORT).show();
-
+    public void getMain(View view) {
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
     }
 
     @Override
@@ -80,7 +81,9 @@ public class ListActivity extends AppCompatActivity {
                     data.getLong(data.getColumnIndex(DBEnum.ID_COLUMN.getS())),
                     data.getString(data.getColumnIndex(DBEnum.NAME_COLUMN.getS())),
                     data.getString(data.getColumnIndex(DBEnum.DESCRIPTION_COLUMN.getS())),
-                    data.getString(data.getColumnIndex(DBEnum.BRANCH_COLUMN.getS()))
+                    data.getString(data.getColumnIndex(DBEnum.BRANCH_COLUMN.getS())),
+                    data.getString(data.getColumnIndex(DBEnum.LATITUDE_COLUMN.getS())),
+                    data.getString(data.getColumnIndex(DBEnum.LENGTH_COLUMN.getS()))
                 ));
             } while (data.moveToNext());
         }
