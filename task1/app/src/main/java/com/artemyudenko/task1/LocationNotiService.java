@@ -32,6 +32,9 @@ public class LocationNotiService extends Service {
 
     private DBManager dbManager;
 
+    /**
+     * Do nothing
+     */
     @Override
     public void onCreate() {
         dbManager = new DBManagerLocal(getApplicationContext());
@@ -41,39 +44,39 @@ public class LocationNotiService extends Service {
 
             @Override
             public void onLocationChanged(Location location) {
-                dbManager.open();
-                Cursor data = (Cursor) dbManager.fetch();
-                dbManager.close();
-                List<Item> items = new ArrayList<>();
-                if (data.moveToFirst()) {
-                    do {
-                        items.add( new Item(
-                                data.getString(data.getColumnIndex(DBEnum.NAME_COLUMN.getS())),
-                                data.getString(data.getColumnIndex(DBEnum.LATITUDE_COLUMN.getS())),
-                                data.getString(data.getColumnIndex(DBEnum.LENGTH_COLUMN.getS()))
-                        ));
-                    } while (data.moveToNext());
-                }
-                for (Item i : items) {
-                    Location shop = new Location("shop");
-                    shop.setLatitude(Double.parseDouble(i.getLattitude()));
-                    shop.setLongitude(Double.parseDouble(i.getLength()));
-
-                    Location current = new Location("current");
-                    current.setLatitude(location.getLatitude());
-                    current.setLongitude(location.getLongitude());
-
-                    float dist = current.distanceTo(shop);
-
-                    createNotificationChannel(getApplicationContext());
-                    if (dist > 50.0 && i.equals(item)) {
-                        showNotification(getApplicationContext(), "Goodbye", "We will miss you in " + i.getName());
-                        item = null;
-                    } else if (dist < 50.0) {
-                        item = i;
-                        showNotification(getApplicationContext(), "Hello", "Hello in " + i.getName());
-                    }
-                }
+//                dbManager.open();
+//                Cursor data = (Cursor) dbManager.fetch();
+//                dbManager.close();
+//                List<Item> items = new ArrayList<>();
+//                if (data.moveToFirst()) {
+//                    do {
+//                        items.add( new Item(
+//                                data.getString(data.getColumnIndex(DBEnum.NAME_COLUMN.getS())),
+//                                data.getString(data.getColumnIndex(DBEnum.LATITUDE_COLUMN.getS())),
+//                                data.getString(data.getColumnIndex(DBEnum.LENGTH_COLUMN.getS()))
+//                        ));
+//                    } while (data.moveToNext());
+//                }
+//                for (Item i : items) {
+//                    Location shop = new Location("shop");
+//                    shop.setLatitude(Double.parseDouble(i.getLattitude()));
+//                    shop.setLongitude(Double.parseDouble(i.getLength()));
+//
+//                    Location current = new Location("current");
+//                    current.setLatitude(location.getLatitude());
+//                    current.setLongitude(location.getLongitude());
+//
+//                    float dist = current.distanceTo(shop);
+//
+//                    createNotificationChannel(getApplicationContext());
+//                    if (dist > 50.0 && i.equals(item)) {
+//                        showNotification(getApplicationContext(), "Goodbye", "We will miss you in " + i.getName());
+//                        item = null;
+//                    } else if (dist < 50.0) {
+//                        item = i;
+//                        showNotification(getApplicationContext(), "Hello", "Hello in " + i.getName());
+//                    }
+//                }
 
             }
 
