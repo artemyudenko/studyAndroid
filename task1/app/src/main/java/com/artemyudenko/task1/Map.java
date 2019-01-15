@@ -1,11 +1,6 @@
 package com.artemyudenko.task1;
 
-import android.content.Context;
 import android.database.Cursor;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -22,7 +17,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class Map extends AppCompatActivity
         implements OnMapReadyCallback {
