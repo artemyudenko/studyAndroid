@@ -145,16 +145,10 @@ public class MyAppWidget extends AppWidgetProvider {
             assetFileDescriptor = context.getResources().openRawResourceFd(R.raw.m2);
         }
         try {
-            mediaPlayer.setDataSource(assetFileDescriptor.getFileDescriptor());
-            mediaPlayer.prepareAsync();
-            mediaPlayer.setOnPreparedListener(
-                    new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mp) {
-                            mp.start();
-                        }
-                    }
-            );
+            mediaPlayer.setDataSource(assetFileDescriptor.getFileDescriptor(), assetFileDescriptor.getStartOffset(), assetFileDescriptor.getLength());
+            assetFileDescriptor.close();
+            mediaPlayer.prepare();
+            mediaPlayer.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
