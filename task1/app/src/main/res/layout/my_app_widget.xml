@@ -1,0 +1,77 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#09C"
+    android:padding="@dimen/widget_margin">
+
+    <Button
+        android:id="@+id/browser"
+        android:layout_width="126dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="44dp"
+        android:onClick="openBrowser"
+        android:text="Browser" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="235dp"
+        android:layout_height="214dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/change"
+        android:layout_width="126dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/browser"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="44dp"
+        android:text="change"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"/>
+
+    <Button
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView3"
+        android:layout_marginTop="26dp"
+        android:text="play" />
+
+    <Button
+        android:id="@+id/pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/play"
+        android:layout_marginStart="9dp"
+        android:layout_marginBottom="-1dp"
+        android:layout_toEndOf="@+id/play"
+        android:text="pause" />
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="240dp"
+        android:layout_toEndOf="@+id/pause"
+        android:text="next" />
+
+    <Button
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="240dp"
+        android:layout_marginEnd="206dp"
+        android:layout_toEndOf="@+id/next"
+        android:text="stop" />
+
+</RelativeLayout>
